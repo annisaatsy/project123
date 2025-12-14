@@ -102,11 +102,11 @@ function renderProductContent() {
 
 function renderAboutContent() {
   // Tentukan path gambar spesifik
-  const annisaImagePath = "/projectgas/public/image/Annisa.jpeg";
-  const sholehImagePath = "/projectgas/public/image/Sholeh.jpeg";
-  const NitaImagePath = "/projectgas/public/image/Nita.jpeg";
-  const IbnulImagePath = "/projectgas/public/image/Ibnul.jpeg";
-  const MikeImagePath = "/projectgas/public/image/Mike.jpg";
+  const annisaImagePath = "/project123/public/image/Annisa.jpeg";
+  const sholehImagePath = "/project123/public/image/Sholeh.jpeg";
+  const NitaImagePath = "/project123/public/image/Nita.jpeg";
+  const IbnulImagePath = "/project123/public/image/Ibnul.jpeg";
+  const MikeImagePath = "/project123/public/image/Mike.jpg";
 
   const teamMembers = [
     {
