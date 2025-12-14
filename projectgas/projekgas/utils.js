@@ -381,7 +381,7 @@ function switchForm(type) {
 }
 
 // ML API Configuration
-const ML_API_URL = "https://ml-project-e6ov.onrender.com/";
+const ML_API_URL = "https://ml-project-e6ov.onrender.com";
 
 // Function to call ML API for offer prediction
 async function predictOffer(data) {
