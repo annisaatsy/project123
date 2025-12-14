@@ -80,17 +80,51 @@ function renderProductContent() {
 }
 
 function renderAboutContent() {
-  const teamMembers = [
-    { name: "Anggota 1", role: "Project Manager" },
-    { name: "Anggota 2", role: "Lead Developer" },
-    { name: "Anggota 3", role: "UI/UX Designer" },
-    { name: "Anggota 4", role: "Backend Engineer" },
-    { name: "Anggota 5", role: "Marketing Specialist" },
-  ];
+  // Tentukan path gambar spesifik
+  const annisaImagePath = "/projekgas/public/image/Annisa.jpeg";
+  const sholehImagePath = "/projekgas/public/image/Sholeh.jpeg";
+  const NitaImagePath = "/projekgas/public/image/Nita.jpeg";
+  const IbnulImagePath = "/projekgas/public/image/Ibnul.jpeg";
 
-  // Placeholder image (minimalist color block)
-  const placeholderImage =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJQAAACUCAYAAAB1Da3qAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJzSURBVHgB7d0rkcIgFAXg2b2F0c+k4r+T3TzZlY1R/YCQvN83Fp52kYJg1zYfB5gYxI3h187YhGDeG992xpGBeGt82hlHBuKt4Wl7HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK8rYg7Q8u17HBlC27H29lK4AAAAAElFTkSuQmCC";
+  const teamMembers = [
+    {
+      name: "Annisa Tasya Salsabila",
+      role: "Frontend & Backend",
+      // Gunakan foto Sholeh yang spesifik
+      image: annisaImagePath,
+      linkedin: "",
+      instagram: "",
+    },
+    {
+      name: "Noor Senita Syaira",
+      role: "Frontend & Backend",
+      image: NitaImagePath, // Kembali ke default/Annisa
+      linkedin: "www.linkedin.com/in/noor-senita-syaira-7823232862",
+      instagram: "https://www.instagram.com/nrsenita?igsh=ZHBwb29scThyc3Qz",
+    },
+    {
+      name: "M. Sholeh",
+      role: "Frontend & Backend",
+      image: sholehImagePath,
+      linkedin:
+        "https://www.linkedin.com/in/m-sholeh-654152353?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      instagram: "https://www.instagram.com/rembo_jw?igsh=cGYzMDVkOGcwaGhp",
+    },
+    {
+      name: "Ibnul Mahdi",
+      role: "Machine Learning",
+      image: IbnulImagePath,
+      linkedin: "www.linkedin.com/in/ibnulmahdi",
+      instagram: "https://www.instagram.com/ibnuhc/",
+    },
+    {
+      name: "Michael Elbert Justian",
+      role: "Machine Learning",
+      image: sholehImagePath,
+      linkedin: "#linkedin-anggota5",
+      instagram: "#instagram-anggota5",
+    },
+  ];
 
   return `
     <div class="text-center py-8">
@@ -106,10 +140,32 @@ function renderAboutContent() {
           (member) => `
           <div class="flex flex-col items-center bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
             <div class="w-28 h-28 mb-4 rounded-full overflow-hidden border-4 border-indigo-200">
-              <img src="${placeholderImage}" alt="${member.name}" class="w-full h-full object-cover"/>
+              <img 
+                src="${member.image}" 
+                alt="${member.name}" 
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/150/93C5FD/4338CA?Text=${member.name.replace(
+                  /\s/g,
+                  "+"
+                )}'"
+                class="w-full h-full object-cover"/>
             </div>
             <h4 class="text-xl font-bold text-gray-900">${member.name}</h4>
-            <p class="text-sm text-indigo-600 font-medium">${member.role}</p>
+            <p class="text-sm text-indigo-600 font-medium mb-3">${
+              member.role
+            }</p>
+            
+            <div class="flex space-x-3 text-gray-400">
+              <a href="${
+                member.linkedin
+              }" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-600 transition duration-150">
+                ${getLinkedInIcon()}
+              </a>
+              <a href="${
+                member.instagram
+              }" target="_blank" rel="noopener noreferrer" class="hover:text-pink-600 transition duration-150">
+                ${getInstagramIcon()}
+              </a>
+            </div>
           </div>
         `
         )
