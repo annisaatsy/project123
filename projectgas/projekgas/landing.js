@@ -6,6 +6,26 @@ import {
   showModal, // from utils.js
 } from "./utils.js";
 
+// Fungsi untuk membuat SVG ikon LinkedIn
+function getLinkedInIcon() {
+  return `
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.395-2.127 4-2.293 4-2.293 2.5 0 3.5 1.875 3.5 5.617v5.911z"/>
+    </svg>
+  `;
+}
+
+// Fungsi untuk membuat SVG ikon Instagram (Diperbarui)
+function getInstagramIcon() {
+  return `
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+    </svg>
+  `;
+}
+
 function renderHomeContent() {
   return `
     <div class="bg-white rounded-2xl shadow-xl p-10 max-w-4xl mx-auto text-center">
@@ -71,58 +91,59 @@ function renderProductContent() {
       </p>
     </div>
 
-    <!-- PRODUK GRID 3 KOLOM -->
     <div id="product-list-container"
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-3">
-      ${DUMMY_PRODUCTS.map((product) => createProductCard(product, false)).join("")}
+      ${DUMMY_PRODUCTS.map((product) => createProductCard(product, false)).join(
+        ""
+      )}
     </div>
   `;
 }
 
 function renderAboutContent() {
   // Tentukan path gambar spesifik
-  const annisaImagePath = "/projekgas/public/image/Annisa.jpeg";
-  const sholehImagePath = "/projekgas/public/image/Sholeh.jpeg";
-  const NitaImagePath = "/projekgas/public/image/Nita.jpeg";
-  const IbnulImagePath = "/projekgas/public/image/Ibnul.jpeg";
+  const annisaImagePath = "/projectgas/projekgas/public/image/Annisa.jpeg";
+  const sholehImagePath = "/projectgas/projekgas/public/image/Sholeh.jpeg";
+  const NitaImagePath = "/projectgas/projekgas/public/image/Nita.jpeg";
+  const IbnulImagePath = "/projectgas/projekgas/public/image/Ibnul.jpeg";
+  const MikeImagePath = "/projectgas/projekgas/public/image/Mike.jpg";
 
   const teamMembers = [
     {
-      name: "Annisa Tasya Salsabila",
+      name: "Annisa Tasya S",
       role: "Frontend & Backend",
       // Gunakan foto Sholeh yang spesifik
       image: annisaImagePath,
-      linkedin: "",
-      instagram: "",
+      linkedin: "https://www.linkedin.com/in/annisa-tasya-salsabila-4b63a92b4/",
+      instagram: "https://www.instagram.com/annisaatsy?igsh=MWwxZXlkOWdhbzhwaw%3D%3D&utm_source=qr",
     },
     {
-      name: "Noor Senita Syaira",
+      name: "Noor Senita S",
       role: "Frontend & Backend",
       image: NitaImagePath, // Kembali ke default/Annisa
-      linkedin: "www.linkedin.com/in/noor-senita-syaira-7823232862",
+      linkedin: "https://www.linkedin.com/in/noor-senita-syaira-7823232862",
       instagram: "https://www.instagram.com/nrsenita?igsh=ZHBwb29scThyc3Qz",
     },
     {
       name: "M. Sholeh",
       role: "Frontend & Backend",
       image: sholehImagePath,
-      linkedin:
-        "https://www.linkedin.com/in/m-sholeh-654152353?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      linkedin:"https://www.linkedin.com/in/m-sholeh-654152353?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
       instagram: "https://www.instagram.com/rembo_jw?igsh=cGYzMDVkOGcwaGhp",
     },
     {
       name: "Ibnul Mahdi",
       role: "Machine Learning",
       image: IbnulImagePath,
-      linkedin: "www.linkedin.com/in/ibnulmahdi",
+      linkedin: "https://www.linkedin.com/in/ibnulmahdi",
       instagram: "https://www.instagram.com/ibnuhc/",
     },
     {
-      name: "Michael Elbert Justian",
+      name: "Michael Elbert J",
       role: "Machine Learning",
-      image: sholehImagePath,
-      linkedin: "#linkedin-anggota5",
-      instagram: "#instagram-anggota5",
+      image: MikeImagePath,
+      linkedin: "https://www.linkedin.com/in/michael-elbert-justian-aa2481239?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      instagram: "https://www.instagram.com/michael_ej1?igsh=MXI0YjZlNTFldTVheg==",
     },
   ];
 
@@ -209,9 +230,7 @@ function handleLandingPageNavigation(target) {
   if (target === "home" || target === "product") {
     const startSearchBtn = document.getElementById("start-search-btn");
     if (startSearchBtn) {
-      startSearchBtn.addEventListener("click", () =>
-        showModal("register")
-      ); // showModal from utils.js
+      startSearchBtn.addEventListener("click", () => showModal("register")); // showModal from utils.js
     }
   }
 }
