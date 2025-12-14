@@ -11,6 +11,7 @@ import {
   showModal,
   saveUser,
   setSession,
+  predictOffer,
 } from "./utils.js";
 import { showPaymentModal } from "./payment.js"; // from payment.js
 
@@ -19,21 +20,134 @@ window.getLoggedInUser = getLoggedInUser;
 
 // --- RENDER HALAMAN DASHBOARD ---
 
-function renderRekomendasiPage(user, filter = "semua") {
+// Daftar kategori sesuai rekomendasi AI
+const ML_CATEGORIES = [
+  "Data Booster",
+  "Device Upgrade Offer",
+  "Family Plan Offer",
+  "General Offer",
+  "Retention Offer",
+  "Roaming Pass",
+  "Streaming Partner Pack",
+  "Top-up Promo",
+  "Voice Bundle",
+];
+
+function renderRekomendasiPage(user, filter = "semua", mlPrediction = null) {
+  // Jika ada rekomendasi AI, otomatis filter ke kategori yang direkomendasikan
+  let activeFilter = filter;
+  if (mlPrediction && mlPrediction.prediction) {
+    activeFilter = mlPrediction.prediction;
+  }
+
   let filteredProducts = DUMMY_PRODUCTS;
 
-  if (filter !== "semua") {
-    // Filter berdasarkan kategori
-    filteredProducts = DUMMY_PRODUCTS.filter((p) => p.category === filter);
+  if (activeFilter !== "semua") {
+    // Filter berdasarkan kategori rekomendasi AI
+    filteredProducts = DUMMY_PRODUCTS.filter((p) => p.category === activeFilter);
   }
 
   const activeClass = (f) =>
-    f === filter
+    f === activeFilter
       ? "bg-indigo-600 text-white"
       : "bg-white text-indigo-600 border border-indigo-300";
 
   return `
     <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Rekomendasi Paket</h2>
+    
+    ${mlPrediction && mlPrediction.prediction ? `
+      <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow-lg mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-2xl font-bold mb-2">🎯 Rekomendasi AI untuk Anda</h3>
+            <p class="text-lg">Berdasarkan analisis penggunaan Anda, kami merekomendasikan:</p>
+            <p class="text-3xl font-extrabold mt-2">${mlPrediction.prediction}</p>
+            <p class="text-sm mt-2 opacity-90">Paket yang sesuai dengan rekomendasi ditampilkan di bawah</p>
+          </div>
+          <div class="text-6xl">🤖</div>
+        </div>
+      </div>
+    ` : `
+      <div class="bg-indigo-50 border-2 border-indigo-200 p-6 rounded-xl mb-6">
+        <h3 class="text-xl font-bold text-indigo-900 mb-3">💡 Dapatkan Rekomendasi Personalisasi dengan AI</h3>
+        <p class="text-gray-700 mb-4">Isi data penggunaan Anda untuk mendapatkan rekomendasi paket yang paling sesuai dengan kebutuhan Anda.</p>
+        <button 
+          id="show-ml-form-btn"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-150"
+        >
+          Isi Form Rekomendasi AI
+        </button>
+      </div>
+    `}
+    
+    <div id="ml-form-container" class="hidden bg-white p-6 rounded-xl shadow-lg mb-6">
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Form Data Penggunaan</h3>
+      <form id="ml-recommendation-form" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="plan_type" class="block text-sm font-medium text-gray-700 mb-1">Tipe Paket Saat Ini</label>
+            <select id="plan_type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+              <option value="">-- Pilih Tipe Paket --</option>
+              <option value="Prepaid">Prepaid</option>
+              <option value="Postpaid">Postpaid</option>
+            </select>
+          </div>
+          <div>
+            <label for="device_brand" class="block text-sm font-medium text-gray-700 mb-1">Merek Device</label>
+            <select id="device_brand" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+              <option value="">-- Pilih Merek --</option>
+              <option value="Samsung">Samsung</option>
+              <option value="Apple">Apple</option>
+              <option value="Xiaomi">Xiaomi</option>
+              <option value="Oppo">Oppo</option>
+              <option value="Vivo">Vivo</option>
+              <option value="Realme">Realme</option>
+              <option value="Other">Lainnya</option>
+            </select>
+          </div>
+          <div>
+            <label for="avg_data_usage_gb" class="block text-sm font-medium text-gray-700 mb-1">Rata-rata Penggunaan Data (GB/bulan)</label>
+            <input type="number" id="avg_data_usage_gb" step="0.1" min="0" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 25.5" required/>
+          </div>
+          <div>
+            <label for="pct_video_usage" class="block text-sm font-medium text-gray-700 mb-1">Persentase Penggunaan Video (%)</label>
+            <input type="number" id="pct_video_usage" step="0.1" min="0" max="100" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 60" required/>
+          </div>
+          <div>
+            <label for="avg_call_duration" class="block text-sm font-medium text-gray-700 mb-1">Rata-rata Durasi Panggilan (menit)</label>
+            <input type="number" id="avg_call_duration" step="0.1" min="0" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 15.5" required/>
+          </div>
+          <div>
+            <label for="sms_freq" class="block text-sm font-medium text-gray-700 mb-1">Frekuensi SMS (kali/bulan)</label>
+            <input type="number" id="sms_freq" min="0" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 50" required/>
+          </div>
+          <div>
+            <label for="monthly_spend" class="block text-sm font-medium text-gray-700 mb-1">Pengeluaran Bulanan (Rp)</label>
+            <input type="number" id="monthly_spend" step="1000" min="0" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 150000" required/>
+          </div>
+          <div>
+            <label for="topup_freq" class="block text-sm font-medium text-gray-700 mb-1">Frekuensi Top Up (kali/bulan)</label>
+            <input type="number" id="topup_freq" min="0" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 3" required/>
+          </div>
+          <div>
+            <label for="travel_score" class="block text-sm font-medium text-gray-700 mb-1">Travel Score (1-10)</label>
+            <input type="number" id="travel_score" min="1" max="10" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 5" required/>
+          </div>
+          <div>
+            <label for="complaint_count" class="block text-sm font-medium text-gray-700 mb-1">Jumlah Komplain (kali)</label>
+            <input type="number" id="complaint_count" min="0" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 0" required/>
+          </div>
+        </div>
+        <div class="flex space-x-3">
+          <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150">
+            Dapatkan Rekomendasi AI
+          </button>
+          <button type="button" id="hide-ml-form-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition duration-150">
+            Batal
+          </button>
+        </div>
+      </form>
+    </div>
     
     <div class="flex space-x-3 mb-8 overflow-x-auto pb-2">
       <button class="flex-shrink-0 px-4 py-2 rounded-full font-semibold transition ${activeClass(
@@ -41,21 +155,12 @@ function renderRekomendasiPage(user, filter = "semua") {
       )}" onclick="window.loadDashboardContent('rekomendasi', window.getLoggedInUser(), { filter: 'semua' })">Semua Paket (${
     DUMMY_PRODUCTS.length
   })</button>
-      <button class="flex-shrink-0 px-4 py-2 rounded-full font-semibold transition ${activeClass(
-        "data"
-      )}" onclick="window.loadDashboardContent('rekomendasi', window.getLoggedInUser(), { filter: 'data' })">Paket Data (${
-    DUMMY_PRODUCTS.filter((p) => p.category === "data").length
-  })</button>
-      <button class="flex-shrink-0 px-4 py-2 rounded-full font-semibold transition ${activeClass(
-        "game"
-      )}" onclick="window.loadDashboardContent('rekomendasi', window.getLoggedInUser(), { filter: 'game' })">Paket Game (${
-    DUMMY_PRODUCTS.filter((p) => p.category === "game").length
-  })</button>
-      <button class="flex-shrink-0 px-4 py-2 rounded-full font-semibold transition ${activeClass(
-        "pulsa"
-      )}" onclick="window.loadDashboardContent('rekomendasi', window.getLoggedInUser(), { filter: 'pulsa' })">Nelpon/Pulsa (${
-    DUMMY_PRODUCTS.filter((p) => p.category === "pulsa").length
-  })</button>
+      ${ML_CATEGORIES.map((cat) => {
+        const count = DUMMY_PRODUCTS.filter((p) => p.category === cat).length;
+        return `<button class="flex-shrink-0 px-4 py-2 rounded-full font-semibold transition ${activeClass(
+          cat
+        )}" onclick="window.loadDashboardContent('rekomendasi', window.getLoggedInUser(), { filter: '${cat}' })">${cat} (${count})</button>`;
+      }).join("")}
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -64,7 +169,7 @@ function renderRekomendasiPage(user, filter = "semua") {
           ? filteredProducts
               .map((product) => createProductCard(product, true))
               .join("")
-          : `<p class="text-gray-500 text-lg p-6 bg-white rounded-lg shadow-md">Tidak ada paket tersedia untuk filter ${filter.toUpperCase()}.</p>`
+          : `<p class="text-gray-500 text-lg p-6 bg-white rounded-lg shadow-md">Tidak ada paket tersedia untuk kategori ${activeFilter}.</p>`
       }
     </div>
   `;
@@ -179,9 +284,7 @@ function renderHomePage(user) {
           }
         </div>
         <div class="p-4 bg-teal-50 rounded-lg text-teal-700 font-semibold text-center">
-          Paket Internet: ${
-            DUMMY_PRODUCTS.filter((p) => p.category === "data").length
-          }
+          Total Paket Tersedia: ${DUMMY_PRODUCTS.length}
         </div>
         <div class="p-4 bg-red-50 rounded-lg text-red-700 font-semibold text-center">
           Akun Aktif: ${user.email}
@@ -208,7 +311,7 @@ function loadDashboardContent(page, user, options = {}) {
 
   switch (page) {
     case "rekomendasi":
-      contentHTML = renderRekomendasiPage(user, options.filter || "semua");
+      contentHTML = renderRekomendasiPage(user, options.filter || "semua", options.mlPrediction || null);
       break;
     case "home":
       contentHTML = renderHomePage(user);
@@ -241,6 +344,33 @@ function loadDashboardContent(page, user, options = {}) {
     document
       .getElementById("topup-form")
       .addEventListener("submit", (e) => handleTopup(e, user));
+  }
+  if (page === "rekomendasi") {
+    // ML Form handlers
+    const showFormBtn = document.getElementById("show-ml-form-btn");
+    const hideFormBtn = document.getElementById("hide-ml-form-btn");
+    const mlForm = document.getElementById("ml-recommendation-form");
+    const mlFormContainer = document.getElementById("ml-form-container");
+
+    if (showFormBtn) {
+      showFormBtn.addEventListener("click", () => {
+        if (mlFormContainer) {
+          mlFormContainer.classList.remove("hidden");
+        }
+      });
+    }
+
+    if (hideFormBtn) {
+      hideFormBtn.addEventListener("click", () => {
+        if (mlFormContainer) {
+          mlFormContainer.classList.add("hidden");
+        }
+      });
+    }
+
+    if (mlForm) {
+      mlForm.addEventListener("submit", (e) => handleMLRecommendation(e, user));
+    }
   }
 }
 
@@ -300,6 +430,60 @@ function handleTopup(e, user) {
   loadDashboardContent("transaksi", user);
 }
 
+async function handleMLRecommendation(e, user) {
+  e.preventDefault();
+  
+  // Collect form data
+  const formData = {
+    device_brand: document.getElementById("device_brand").value,
+    plan_type: document.getElementById("plan_type").value,
+    avg_data_usage_gb: parseFloat(document.getElementById("avg_data_usage_gb").value),
+    pct_video_usage: parseFloat(document.getElementById("pct_video_usage").value),
+    avg_call_duration: parseFloat(document.getElementById("avg_call_duration").value),
+    sms_freq: parseInt(document.getElementById("sms_freq").value),
+    monthly_spend: parseFloat(document.getElementById("monthly_spend").value),
+    topup_freq: parseInt(document.getElementById("topup_freq").value),
+    travel_score: parseInt(document.getElementById("travel_score").value),
+    complaint_count: parseInt(document.getElementById("complaint_count").value),
+  };
+
+  // Validate all fields are filled
+  for (const [key, value] of Object.entries(formData)) {
+    if (value === "" || value === null || value === undefined) {
+      showMessage(`Mohon lengkapi semua field, terutama ${key.replace(/_/g, " ")}`, "error");
+      return;
+    }
+  }
+
+  try {
+    showMessage("Memproses rekomendasi AI...", "info");
+    
+    // Call ML API
+    const result = await predictOffer(formData);
+    
+    if (result && result.prediction) {
+      // Hide form and show prediction
+      const mlFormContainer = document.getElementById("ml-form-container");
+      if (mlFormContainer) {
+        mlFormContainer.classList.add("hidden");
+      }
+      
+      // Reload page with prediction - filter otomatis ke kategori yang direkomendasikan
+      loadDashboardContent("rekomendasi", user, { 
+        filter: result.prediction, // Filter otomatis ke kategori rekomendasi
+        mlPrediction: result 
+      });
+      
+      showMessage(`Rekomendasi AI: ${result.prediction}. Paket yang sesuai ditampilkan di bawah.`, "success");
+    } else {
+      showMessage("Tidak dapat mendapatkan rekomendasi. Silakan coba lagi.", "error");
+    }
+  } catch (error) {
+    console.error("Error getting ML recommendation:", error);
+    showMessage("Terjadi kesalahan saat memproses rekomendasi. Pastikan API tersedia.", "error");
+  }
+}
+
 // --- PROFILE IMAGE HANDLER ---
 
 function handleProfileImageUpload(e) {
@@ -346,4 +530,5 @@ export {
   handlePurchaseClick,
   handleTopup,
   handleProfileImageUpload,
+  handleMLRecommendation,
 };

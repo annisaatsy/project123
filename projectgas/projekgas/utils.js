@@ -5,67 +5,206 @@ const STORAGE_KEY = "telco_user_data";
 const SESSION_KEY = "telco_user_session";
 const HISTORY_KEY = "telco_history";
 
-// Data Produk Diperbarui
+// Data Produk Diperbarui - Sesuai dengan kategori rekomendasi AI
 const DUMMY_PRODUCTS = [
+  // Data Booster
   {
     id: 1,
-    name: "Paket Internet Ultra Cepat",
-    category: "data",
+    name: "Data Booster 50GB",
+    category: "Data Booster",
     provider: "Tele-X",
     quota: "50 GB",
     speed: "50 Mbps",
     price: 120000,
-    type: "Data",
+    type: "Data Booster",
   },
   {
     id: 2,
-    name: "Combo Keluarga Hemat",
-    category: "data",
+    name: "Data Booster 100GB",
+    category: "Data Booster",
     provider: "GlobalCom",
-    quota: "30 GB + Unlimited Telp",
-    speed: "10 Mbps",
-    price: 150000,
-    type: "Combo",
+    quota: "100 GB",
+    speed: "100 Mbps",
+    price: 200000,
+    type: "Data Booster",
   },
   {
     id: 3,
-    name: "Paket Nelpon Bebas Khawatir",
-    category: "pulsa",
+    name: "Data Booster Unlimited",
+    category: "Data Booster",
     provider: "PhoneLink",
-    quota: "500 Menit All Operator",
-    speed: "N/A",
-    price: 65000,
-    type: "Voice",
+    quota: "Unlimited",
+    speed: "Unlimited FUP",
+    price: 300000,
+    type: "Data Booster",
   },
+  // Device Upgrade Offer
   {
     id: 4,
-    name: "Internet Harian Murah",
-    category: "data",
+    name: "Device Upgrade - Smartphone Bundle",
+    category: "Device Upgrade Offer",
     provider: "Tele-X",
-    quota: "5 GB Harian",
-    speed: "Unlimited FUP",
-    price: 25000,
-    type: "Data",
+    quota: "30 GB + Device",
+    speed: "25 Mbps",
+    price: 5000000,
+    type: "Device Upgrade",
   },
   {
     id: 5,
-    name: "Paket Streaming Gamer Pro",
-    category: "game",
+    name: "Device Upgrade - Tablet Bundle",
+    category: "Device Upgrade Offer",
     provider: "GlobalCom",
-    quota: "100 GB (50GB Game)",
-    speed: "100 Mbps",
-    price: 250000,
-    type: "Data",
+    quota: "50 GB + Device",
+    speed: "50 Mbps",
+    price: 3500000,
+    type: "Device Upgrade",
   },
+  // Family Plan Offer
   {
     id: 6,
-    name: "Pulsa Darurat 5K",
-    category: "pulsa",
+    name: "Family Plan 4 Lines",
+    category: "Family Plan Offer",
     provider: "PhoneLink",
-    quota: "5000 Pulsa",
+    quota: "40 GB/line",
+    speed: "30 Mbps",
+    price: 400000,
+    type: "Family Plan",
+  },
+  {
+    id: 7,
+    name: "Family Plan 6 Lines",
+    category: "Family Plan Offer",
+    provider: "Tele-X",
+    quota: "50 GB/line",
+    speed: "50 Mbps",
+    price: 600000,
+    type: "Family Plan",
+  },
+  // General Offer
+  {
+    id: 8,
+    name: "General Offer - Paket Hemat",
+    category: "General Offer",
+    provider: "GlobalCom",
+    quota: "25 GB",
+    speed: "20 Mbps",
+    price: 75000,
+    type: "General",
+  },
+  {
+    id: 9,
+    name: "General Offer - Paket Standar",
+    category: "General Offer",
+    provider: "PhoneLink",
+    quota: "40 GB",
+    speed: "30 Mbps",
+    price: 120000,
+    type: "General",
+  },
+  // Retention Offer
+  {
+    id: 10,
+    name: "Retention Offer - Loyalty Bonus",
+    category: "Retention Offer",
+    provider: "Tele-X",
+    quota: "60 GB",
+    speed: "40 Mbps",
+    price: 100000,
+    type: "Retention",
+  },
+  {
+    id: 11,
+    name: "Retention Offer - Special Discount",
+    category: "Retention Offer",
+    provider: "GlobalCom",
+    quota: "80 GB",
+    speed: "50 Mbps",
+    price: 150000,
+    type: "Retention",
+  },
+  // Roaming Pass
+  {
+    id: 12,
+    name: "Roaming Pass - Asia",
+    category: "Roaming Pass",
+    provider: "PhoneLink",
+    quota: "10 GB",
+    speed: "20 Mbps",
+    price: 250000,
+    type: "Roaming",
+  },
+  {
+    id: 13,
+    name: "Roaming Pass - Global",
+    category: "Roaming Pass",
+    provider: "Tele-X",
+    quota: "20 GB",
+    speed: "30 Mbps",
+    price: 500000,
+    type: "Roaming",
+  },
+  // Streaming Partner Pack
+  {
+    id: 14,
+    name: "Streaming Partner Pack - Netflix",
+    category: "Streaming Partner Pack",
+    provider: "GlobalCom",
+    quota: "50 GB + Netflix",
+    speed: "50 Mbps",
+    price: 180000,
+    type: "Streaming",
+  },
+  {
+    id: 15,
+    name: "Streaming Partner Pack - Disney+",
+    category: "Streaming Partner Pack",
+    provider: "PhoneLink",
+    quota: "40 GB + Disney+",
+    speed: "40 Mbps",
+    price: 160000,
+    type: "Streaming",
+  },
+  // Top-up Promo
+  {
+    id: 16,
+    name: "Top-up Promo - Bonus 20%",
+    category: "Top-up Promo",
+    provider: "Tele-X",
+    quota: "Pulsa + Bonus",
     speed: "N/A",
-    price: 6000,
-    type: "Pulsa",
+    price: 100000,
+    type: "Top-up",
+  },
+  {
+    id: 17,
+    name: "Top-up Promo - Double Data",
+    category: "Top-up Promo",
+    provider: "GlobalCom",
+    quota: "2x Kuota",
+    speed: "N/A",
+    price: 150000,
+    type: "Top-up",
+  },
+  // Voice Bundle
+  {
+    id: 18,
+    name: "Voice Bundle - Unlimited Call",
+    category: "Voice Bundle",
+    provider: "PhoneLink",
+    quota: "Unlimited Menit",
+    speed: "N/A",
+    price: 80000,
+    type: "Voice",
+  },
+  {
+    id: 19,
+    name: "Voice Bundle - 1000 Menit",
+    category: "Voice Bundle",
+    provider: "Tele-X",
+    quota: "1000 Menit",
+    speed: "N/A",
+    price: 50000,
+    type: "Voice",
   },
 ];
 
@@ -148,6 +287,21 @@ function showMessage(message, type = "success") {
   }, 3000);
 }
 
+function getCategoryIcon(category) {
+  const iconMap = {
+    "Data Booster": "🚀",
+    "Device Upgrade Offer": "📱",
+    "Family Plan Offer": "👨‍👩‍👧‍👦",
+    "General Offer": "🎁",
+    "Retention Offer": "💎",
+    "Roaming Pass": "✈️",
+    "Streaming Partner Pack": "📺",
+    "Top-up Promo": "💰",
+    "Voice Bundle": "📞",
+  };
+  return iconMap[category] || "📦";
+}
+
 function createProductCard(product, isDashboard = false) {
   const buttonClass = isDashboard
     ? "bg-green-600 hover:bg-green-700"
@@ -160,18 +314,13 @@ function createProductCard(product, isDashboard = false) {
   return `
     <div class="flex-shrink-0 w-80 bg-white p-6 rounded-xl shadow-lg border-t-4 border-indigo-500">
       <div class="flex justify-between items-start mb-4">
-        <span class="text-3xl">${
-          product.category === "data"
-            ? "🌐"
-            : product.category === "game"
-            ? "🎮"
-            : "📞"
-        }</span>
+        <span class="text-3xl">${getCategoryIcon(product.category)}</span>
         <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-100 text-indigo-800">${
           product.provider
         }</span>
       </div>
       <h4 class="text-xl font-bold text-gray-900 mb-2">${product.name}</h4>
+      <p class="text-xs font-semibold text-indigo-600 mb-2">${product.category}</p>
       <p class="text-3xl font-extrabold text-indigo-600 mb-4">
         Rp ${formatRupiah(product.price)}
       </p>
@@ -231,6 +380,32 @@ function switchForm(type) {
   }
 }
 
+// ML API Configuration
+const ML_API_URL = "https://ml-project-e6ov.onrender.com/";
+
+// Function to call ML API for offer prediction
+async function predictOffer(data) {
+  try {
+    const response = await fetch(`${ML_API_URL}/predict`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error calling ML API:", error);
+    throw error;
+  }
+}
+
 export {
   STORAGE_KEY,
   DUMMY_PRODUCTS,
@@ -247,4 +422,6 @@ export {
   showModal,
   hideModal,
   switchForm,
+  predictOffer,
+  ML_API_URL,
 };
